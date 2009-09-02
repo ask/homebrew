@@ -7,6 +7,11 @@ class ErlangManuals <Formula
   @md5='fa8f96159bd9a88aa2fb9e4d79d7affe'
 end
 
+class ErlangHtmlDocs <Formula
+  @url='http://erlang.org/download/otp_doc_html_R13B01.tar.gz'
+  @md5='42cb55bbfa5dc071fd56034615072f7a'
+end
+
 class Erlang <Formula
   @version='5.7.2'
   @homepage='http://www.erlang.org'
@@ -27,4 +32,5 @@ class Erlang <Formula
     
     ErlangManuals.new.brew { man.install Dir['man/*'] }
   end
+  
 end

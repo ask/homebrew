@@ -21,6 +21,8 @@
 #  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
 #  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
+require 'dependency'
+
 class ExecutionError <RuntimeError
   def initialize cmd, args=[]
     super "#{cmd} #{args*' '}"
@@ -56,6 +58,7 @@ class Formula
     @homepage=self.class.homepage unless @homepage
     @md5=self.class.md5 unless @md5
     @sha1=self.class.sha1 unless @sha1
+    @dependencies={:library => {}, :binary => {}, :other => {}}
   end
 
   # if the dir is there, but it's empty we consider it not installed
@@ -75,7 +78,7 @@ class Formula
     self.class.path name
   end
 
-  attr_reader :url, :version, :homepage, :name
+  attr_reader :url, :version, :homepage, :name, :dependencies
 
   def bin; prefix+'bin' end
   def sbin; prefix+'sbin' end
@@ -120,6 +123,7 @@ class Formula
     
     stage do
       begin
+        deps
         patch
         yield self
       rescue Interrupt, RuntimeError, SystemCallError => e
